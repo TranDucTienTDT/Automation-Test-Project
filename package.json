@@ -1,0 +1,29 @@
+{
+  "name": "automation-test-project",
+  "version": "1.0.0",
+  "description": "for cypress, allure report and gha cicd",
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress run",
+    "report": "allure generate allure-results --clean -o allure-report && allure open",
+    "cy:open": "cypress open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TranDucTienTDT/Automation-Test-Project.git"
+  },
+  "keywords": [
+    "cypress",
+    "allure",
+    "gha"
+  ],
+  "author": "Tien Tran",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TranDucTienTDT/Automation-Test-Project/issues"
+  },
+  "homepage": "https://github.com/TranDucTienTDT/Automation-Test-Project#readme",
+  "devDependencies": {
+    "cypress": "^14.4.0"
+  }
+}

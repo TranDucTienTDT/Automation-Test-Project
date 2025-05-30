@@ -1,0 +1,33 @@
+# Bỏ qua thư mục node_modules
+node_modules/
+# Bỏ qua thư mục allure report
+allure-results/
+allure-report/
+# Bỏ qua các thư mục build, dist
+build/
+dist/
+
+# Bỏ qua file log
+*.log
+
+# Bỏ qua thư mục coverage (nếu dùng test coverage)
+coverage/
+
+# Bỏ qua file môi trường
+.env
+
+# Bỏ qua các file cấu hình IDE hoặc editor
+.vscode/
+.idea/
+# Bỏ qua các file tạm thời
+*.tmp
+# Bỏ qua các file hệ thống
+.DS_Store
+# Bỏ qua các file backup
+*~
+# Bỏ qua các file nén
+*.zip
+# Bỏ qua các file cấu hình cá nhân
+*.user
+# Bỏ qua các file cấu hình của hệ thống
+*package-lock.json
