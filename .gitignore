@@ -5,6 +5,10 @@ node_modules/
 allure-results/
 allure-report/
 screenshots/
+videos/
+result/
+
+.DS_Store
 
 # Bỏ qua file log
 *.log

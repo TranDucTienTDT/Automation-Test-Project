@@ -25,12 +25,16 @@ jobs:
         run: npm run test
 
       - name: Generate Allure Report
-        run: |
-          npm run report
-        continue-on-error: true
-
-      - name: Upload Allure report artifact
-        uses: actions/upload-artifact@v3
+        uses: simple-elf/allure-report-action@master
+        if: always()
         with:
-          name: allure-report
-          path: allure-report
+          allure_results: allure-results
+          gh_pages: allure
+
+      - name: Deploy report to Github Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: allure
+          publish_dir: allure-history
