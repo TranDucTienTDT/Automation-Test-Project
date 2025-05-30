@@ -68,47 +68,51 @@ git push origin main
 ## CI/CD Explains
 ```
 name: Cypress CI with Allure
-
 on:
   push:
     branches:
       - main
-
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
-
       - name: Install dependencies
-        run: npm ci
-
+        run: npm install
+      - name: Install Cypress
+        run: |
+          npx cypress install
+          npx cypress cache list
       - name: Run Cypress tests
         run: npm run test
-
       - name: Generate Allure Report
-        run: |
-          npm run report
-        continue-on-error: true
-
-      - name: Upload Allure report artifact
-        uses: actions/upload-artifact@v3
+        uses: simple-elf/allure-report-action@master
+        if: always()
         with:
-          name: allure-report
-          path: allure-report
+          allure_results: allure-results
+          gh_pages: allure
+      - name: Deploy report to Github Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: allure
+          publish_dir: allure-history
 ```
 ###
 This YAML configuration defines a GitHub Actions workflow named "Cypress CI with Allure." The workflow is triggered automatically whenever code is pushed to the main branch of the repository. Its primary purpose is to automate the process of running Cypress end-to-end tests and generating an Allure test report.
 
-The workflow consists of a single job called "cypress-run," which executes on the latest Ubuntu runner provided by GitHub. The job is broken down into several steps. First, it checks out the repository code using the official checkout action. Next, it sets up a Node.js environment with version 18, ensuring compatibility with the project's dependencies.
+This GitHub Actions workflow, named "Cypress CI with Allure," is designed to automate end-to-end testing and reporting for a JavaScript project using Cypress and Allure. The workflow is triggered whenever code is pushed to the main branch.
 
-After setting up Node.js, the workflow installs all project dependencies using the npm ci command, which is optimized for continuous integration environments. It then runs the Cypress test suite by executing npm run test. Once the tests complete, the workflow attempts to generate an Allure report by running npm run report. The continue-on-error: true option allows the workflow to proceed even if report generation fails, preventing the entire job from failing due to reporting issues.
+The workflow defines a single job, "cypress-run," which runs on the latest Ubuntu environment. The job begins by checking out the repository code, then sets up Node.js version 18 to match the project's requirements. Next, it installs all project dependencies using npm install.
 
-Finally, the workflow uploads the generated Allure report as an artifact named "allure-report." This makes the report available for download and review directly from the GitHub Actions interface, providing valuable feedback on test results for each push to the main branch.
+After dependencies are installed, Cypress is explicitly installed and its cache is listed, ensuring the test runner is ready and any caching issues are visible in the logs. The workflow then runs the project's test suite using the npm run test command.
+
+Once tests are complete, the workflow generates an Allure report using the simple-elf/allure-report-action. The if: always() condition ensures this step runs even if previous steps fail, so test results are always processed. The Allure results are taken from the allure-results directory and published to a branch named allure.
+
+Finally, the workflow deploys the generated Allure report to GitHub Pages using the peaceiris/actions-gh-pages action. This step also uses if: always() to guarantee execution, and it publishes the contents of the allure-history directory to the allure branch, making the test report accessible as a static website. This setup provides automated testing, reporting, and easy access to test results for every push to the main branch.
