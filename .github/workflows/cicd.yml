@@ -43,3 +43,9 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: allure
           publish_dir: allure-history
+  summary-report:
+    runs-on: ubuntu-latest
+    needs: cypress-run
+    steps:
+     - name: Report Allure Summary
+       run: echo "Allure report is available at https://tranductientdt.github.io/Automation-Test-Project/"
