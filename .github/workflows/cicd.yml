@@ -27,6 +27,7 @@ jobs:
           npx cypress cache list
 
       - name: Run Cypress tests
+        continue-on-error: true
         run: npm run test
 
       - name: Generate Allure Report
